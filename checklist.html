@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SANT CRANES | Check List Mantenimiento Preventivo (FRC001)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              950: '#060F1D',
+              900: '#0B1B32',
+              800: '#13294B',
+              700: '#1E3A66'
+            },
+            amber: {
+              400: '#FACC15',
+              500: '#EAB308',
+              600: '#CA8A04'
+            },
+            steel: '#38BDF8'
+          },
+          fontFamily: {
+            display: ['"Barlow Condensed"', 'sans-serif'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .hazard-stripe {
+      background: repeating-linear-gradient(
+        -45deg,
+        #EAB308,
+        #EAB308 14px,
+        #0B1B32 14px,
+        #0B1B32 28px
+      );
+    }
+    .month-btn {
+      width: 28px;
+      height: 26px;
+      font-size: 11px;
+      font-weight: 800;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #64748b;
+      transition: all 0.12s ease;
+      cursor: pointer;
+    }
+    .month-btn:hover {
+      border-color: #0B1B32;
+      transform: scale(1.06);
+    }
+    .month-btn[data-state="OK"] {
+      background: #16a34a;
+      border-color: #15803d;
+      color: #ffffff;
+    }
+    .month-btn[data-state="PREV"] {
+      background: #eab308;
+      border-color: #ca8a04;
+      color: #060f1d;
+    }
+    .month-btn[data-state="CORR"] {
+      background: #dc2626;
+      border-color: #b91c1c;
+      color: #ffffff;
+    }
+    .month-btn[data-state="NA"] {
+      background: #475569;
+      border-color: #334155;
+      color: #f1f5f9;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #ffffff !important; color: #000000 !important; font-size: 10px !important; }
+      .print-card { box-shadow: none !important; border: 1px solid #94a3b8 !important; break-inside: avoid; }
+      .month-btn { width: 20px; height: 20px; font-size: 9px; border: 1px solid #64748b !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      input, select, textarea { border: none !important; background: transparent !important; padding: 1px !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 font-sans antialiased">
+
+  <!-- HEADER CORPORATIVO -->
+  <header class="bg-navy-900 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <a href="index.html" class="no-print inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-slate-200 border border-slate-700 text-xs font-bold transition">
+          ← Sitio Web
+        </a>
+        <img src="data:image/jpeg;base64,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" alt="SANT CRANES" class="h-12 w-auto rounded border border-slate-700 bg-black" />
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-amber-500 text-navy-950 font-extrabold text-[11px] uppercase">Formato FRC001 REV0</span>
+            <span class="text-xs text-slate-300 hidden sm:inline">Grúas Viajeras • Polipastos • Servicios Industriales</span>
+          </div>
+          <h1 class="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-wide text-white mt-0.5">
+            Check List de Mantenimiento Preventivo
+          </h1>
+        </div>
+      </div>
+
+      <div class="text-right text-xs text-slate-300 space-y-0.5">
+        <div class="font-bold text-amber-400">Guadalupe, Nuevo León, México</div>
+        <div>Tel: +52 81 2874 7775 | WhatsApp: +52 81 1229 7333</div>
+        <div>santcranesventas@gmail.com</div>
+      </div>
+    </div>
+    <div class="h-1.5 w-full hazard-stripe"></div>
+  </header>
+
+  <!-- BARRA DE HERRAMIENTAS OPERATIVAS -->
+  <div class="no-print sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" id="btnLoadExample" class="px-3 py-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-amber-400 text-xs font-bold transition">
+          Cargar Ejemplo (Grúa SPH 20/7.5T)
+        </button>
+        <button type="button" id="btnSaveAppsScript" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold transition shadow-sm">
+          ☁ Guardar en Google Sheets / Drive
+        </button>
+        <button type="button" id="btnExportCSV" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-bold transition">
+          Exportar Excel (CSV)
+        </button>
+        <button type="button" id="btnExportJSON" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition">
+          Respaldo JSON
+        </button>
+        <button type="button" onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-navy-950 text-xs font-extrabold transition">
+          Imprimir / PDF
+        </button>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span id="saveStatus" class="text-[11px] font-semibold text-slate-500">Autoguardado local activo</span>
+        <button type="button" id="btnResetAll" class="px-2.5 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold transition">
+          Limpiar Todo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- NOTIFICACIÓN DE ESTADO APPS SCRIPT -->
+    <div id="syncBanner" class="hidden rounded-xl p-4 text-sm font-medium border"></div>
+
+    <!-- TARJETA 1: FICHA TÉCNICA DEL EQUIPO Y PEDIDO -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 print-card">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 mb-4">
+        <h2 class="font-display text-xl font-extrabold uppercase text-navy-900">1. Ficha Técnica del Equipo y Orden de Servicio</h2>
+        <div class="flex items-center gap-3 text-xs">
+          <label class="font-bold text-slate-600">Estatus:</label>
+          <select id="meta_estatus" class="meta-input px-2.5 py-1 rounded border border-slate-300 font-bold text-navy-900 bg-slate-50">
+            <option value="EN PROCESO">EN PROCESO</option>
+            <option value="CONCLUIDO">CONCLUIDO</option>
+            <option value="CONCLUIDO PARCIALMENTE">CONCLUIDO PARCIALMENTE</option>
+            <option value="FUERA DE OPERACIÓN (LOTO)">FUERA DE OPERACIÓN (LOTO)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 text-xs">
+        <div class="lg:col-span-2">
+          <label class="block font-bold text-slate-600 uppercase mb-1">Proyecto / Descripción de Grúa</label>
+          <input id="meta_proyecto" type="text" placeholder="Ej. Mantenimiento Preventivo de Grúa Viajera Bipuente" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Cliente / Planta</label>
+          <input id="meta_cliente" type="text" placeholder="Ej. METALSA / Planta Ramos Arizpe" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">No. de Pedido / Orden</label>
+          <input id="meta_pedido" type="text" placeholder="Ej. SEM-A00049" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-bold text-navy-900 focus:border-navy-900 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Grúa No. de Serie</label>
+          <input id="meta_serie" type="text" placeholder="Ej. MK2000" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Grúa No. de Máquina</label>
+          <input id="meta_maquina" type="text" placeholder="Ej. GR-03" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Área / Nave Industrial</label>
+          <input id="meta_area" type="text" placeholder="Ej. Estampado Módulo 3" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Capacidad</label>
+          <input id="meta_capacidad" type="text" placeholder="Ej. 20 / 7.5 TON" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Tipo / Marca</label>
+          <input id="meta_tipo" type="text" placeholder="Ej. Bipuente - SPH" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Dispositivo Bajo Gancho</label>
+          <input id="meta_dispositivo" type="text" placeholder="Ej. Balancín / Electroimán / Gancho" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Periodo</label>
+          <input id="meta_periodo" type="text" value="2026 - 2027" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Técnico / Supervisor SANT CRANES</label>
+          <input id="meta_tecnico" type="text" placeholder="Nombre del técnico responsable" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Fecha de Entrega del Equipo</label>
+          <input id="meta_fechaEntrega" type="date" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-600 uppercase mb-1">Fecha de Mantenimiento</label>
+          <input id="meta_fechaMtto" type="date" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="block font-bold text-slate-600 uppercase mb-1">Contacto Cliente / Teléfono</label>
+          <input id="meta_contactoCliente" type="text" placeholder="Ej. Ing. Sergio Rodríguez" class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 font-medium focus:border-navy-900 focus:outline-none" />
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI RESUMEN + LEYENDA + BUSCADOR -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 print-card">
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+          <div class="text-[11px] font-bold uppercase text-slate-500">Total Puntos Excel</div>
+          <div id="kpiTotal" class="font-display text-2xl font-extrabold text-navy-900">221</div>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
+          <div class="text-[11px] font-bold uppercase text-emerald-700">✓ Conforme (OK)</div>
+          <div id="kpiOk" class="font-display text-2xl font-extrabold text-emerald-700">0</div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-xl p-3">
+          <div class="text-[11px] font-bold uppercase text-amber-700">⚠ Preventivo / Obs</div>
+          <div id="kpiPrev" class="font-display text-2xl font-extrabold text-amber-700">0</div>
+        </div>
+        <div class="bg-red-50 border border-red-200 rounded-xl p-3">
+          <div class="text-[11px] font-bold uppercase text-red-700">✕ Correctivo / Falla</div>
+          <div id="kpiCorr" class="font-display text-2xl font-extrabold text-red-700">0</div>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 col-span-2 sm:col-span-1">
+          <div class="text-[11px] font-bold uppercase text-slate-500">Avance Evaluado</div>
+          <div id="kpiPct" class="font-display text-2xl font-extrabold text-navy-900">0%</div>
+        </div>
+      </div>
+
+      <div class="no-print flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200">
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="font-bold text-slate-700">Clic en celda mensual alterna:</span>
+          <span class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold">✓ OK</span>
+          <span class="px-2 py-0.5 rounded bg-amber-500 text-navy-950 font-bold">⚠ Prev/Obs</span>
+          <span class="px-2 py-0.5 rounded bg-red-600 text-white font-bold">✕ Corr/Falla</span>
+          <span class="px-2 py-0.5 rounded bg-slate-600 text-white font-bold">N/A</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <input id="searchInput" type="text" placeholder="Buscar componente (ej. Freno, GAP, Cable, Inversor)..." class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs w-full sm:w-64 focus:outline-none focus:border-navy-900" />
+          <select id="filterState" class="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-semibold bg-white">
+            <option value="ALL">Ver todos los puntos</option>
+            <option value="ISSUES">Solo hallazgos (⚠ / ✕)</option>
+            <option value="EVALUATED">Solo evaluados</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- NAVEGACIÓN RÁPIDA POR BLOQUE -->
+      <div id="blockTabs" class="no-print flex flex-wrap gap-1.5 mt-4 pt-3 border-t border-slate-100"></div>
+    </section>
+
+    <!-- CONTENEDOR DE LOS 6 BLOQUES DEL CHECK LIST -->
+    <div id="checklistContainer" class="space-y-6"></div>
+
+    <!-- TARJETA: REFACCIONES REQUERIDAS Y HALLAZGOS CRÍTICOS -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 print-card">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 mb-4">
+        <div>
+          <h2 class="font-display text-xl font-extrabold uppercase text-navy-900">2. Refacciones Requeridas y Recomendaciones Técnicas</h2>
+          <p class="text-xs text-slate-500">Listado de componentes detectados para cotización o sustitución prioritaria</p>
+        </div>
+        <button type="button" id="btnAddPart" class="no-print px-3 py-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-amber-400 text-xs font-bold transition">
+          + Agregar Refacción / Hallazgo
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="bg-navy-900 text-white uppercase">
+              <th class="p-2.5 rounded-tl-lg w-14">Ítem</th>
+              <th class="p-2.5">Descripción del Repuesto / Componente</th>
+              <th class="p-2.5">Acción Requerida</th>
+              <th class="p-2.5 w-36">Prioridad</th>
+              <th class="no-print p-2.5 rounded-tr-lg w-16 text-center">Quitar</th>
+            </tr>
+          </thead>
+          <tbody id="partsTableBody" class="divide-y divide-slate-200"></tbody>
+        </table>
+      </div>
+
+      <div class="mt-5">
+        <label class="block text-xs font-bold uppercase text-slate-600 mb-1.5">Notas y Comentarios Generales del Servicio</label>
+        <textarea id="meta_notasGenerales" rows="3" placeholder="Observaciones generales, bloqueos LOTO aplicados, condiciones de prueba con voltaje o recomendaciones al cliente..." class="meta-input w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:border-navy-900 focus:outline-none"></textarea>
+      </div>
+    </section>
+
+    <!-- TARJETA: FIRMAS DIGITALES DE CONFORMIDAD -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 print-card">
+      <h2 class="font-display text-xl font-extrabold uppercase text-navy-900 border-b border-slate-200 pb-3 mb-4">
+        3. Firmas de Conformidad y Cierre de Servicio
+      </h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Firma Técnico -->
+        <div class="border border-slate-300 rounded-xl p-4 bg-slate-50">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-extrabold uppercase text-navy-900">Supervisor / Técnico SANT CRANES</span>
+            <button type="button" onclick="clearSignature('sigTech')" class="no-print text-xs font-bold text-red-600 hover:underline">Borrar firma</button>
+          </div>
+          <canvas id="sigTech" width="460" height="140" class="w-full h-36 bg-white border border-slate-300 rounded-lg cursor-crosshair touch-none"></canvas>
+          <div class="mt-2 text-[11px] text-slate-500 text-center">Nombre y Firma del Responsable Técnico</div>
+        </div>
+
+        <!-- Firma Cliente -->
+        <div class="border border-slate-300 rounded-xl p-4 bg-slate-50">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-extrabold uppercase text-navy-900">Supervisor / Ingeniero Cliente</span>
+            <button type="button" onclick="clearSignature('sigClient')" class="no-print text-xs font-bold text-red-600 hover:underline">Borrar firma</button>
+          </div>
+          <canvas id="sigClient" width="460" height="140" class="w-full h-36 bg-white border border-slate-300 rounded-lg cursor-crosshair touch-none"></canvas>
+          <div class="mt-2 text-[11px] text-slate-500 text-center">Nombre y Firma de Recepción en Planta</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // =========================================================================
+    // CONFIGURACIÓN GOOGLE APPS SCRIPT (Pega aquí tu URL /exec al desplegar)
+    // =========================================================================
+    const APPS_SCRIPT_URL = ""; // Ej: "https://script.google.com/macros/s/AKfycb.../exec"
+
+    const CHECKLIST_BLOCKS = [{"id": "block_1", "title": "Movimiento: Puente", "subsections": [{"name": "Motores", "items": ["Apriete de conexiones.", "Revisar Corrientes", "Lubricar Rodamientos.", "Retenes del Motor", "Reapriete de Tornillos Base.", "Control de Vibraciones"]}, {"name": "Frenos", "items": ["Apriete de Conexiones.", "Ajuste de GAP. (Entre Hierro)", "Revisar Disco de Fricción.", "Revisar Platos del Freno", "Limpiar con Aire Comprimido."]}, {"name": "Cabezales", "items": ["Apriete de Tornilos Puente-Cabezal.", "Apriete de Tornillos de Capsulas.", "Apriete de Tornillos Topes del Puente", "Revision de Daños por Grietas", "Lubricar Rodamientos.", "Revisar Pista y Cejas de Ruedas", "Revisión de Cuñero de Eje (Motriz)."]}, {"name": "Reductor", "items": ["Revisar Soldadura de Base.", "Apriete de Tornillo Base.", "Revisión de Amortiguador.", "Revisión de Nivel de Aceite.", "Cambio de Aceite.", "Revision por fujas en Reten de Salida.", "Revisión por fujas de Reten de Entrada.", "Inspección por Ruidos Internos.", "Apriete en Tornillos de Tapa."]}, {"name": "Acoplamiento del reductor", "items": ["Revisión de Cuñero Flecha Hueca", "Revisión de Cuña.", "Revisión de Seguro Truack", "Apriete deTornillo Candado"]}, {"name": "Puente (Estructural)", "items": ["Limpieza de Plataformas.", "Sistema Mens. Carretillas y Viga", "Revisión de Riel.", "Apriete de Planchuelas de Riel.", "Revisar Soldadura de Topes para Carro.", "Revisión de Soladura Union Puente.", "Letreros de Capacidad"]}]}, {"id": "block_2", "title": "Movimiento: Carro", "subsections": [{"name": "Motores", "items": ["Apriete de conexiones.", "Revisar Corrientes", "Revisar Rodamientos (Ruidos)", "Retenes del Motor", "Reapriete de Tornillos Base."]}, {"name": "Frenos", "items": ["Apriete de Conexiones.", "Ajuste de GAP. (Entre Hierro)", "Revisar Disco de Fricción.", "Revisar Platos del Freno", "Limpiar con Aire Comprimido."]}, {"name": "Cabezales", "items": ["Apriete de Tornillos de Capsulas.", "Revisión de gomas amortiguador.", "Revision de Daños por Grietas", "Lubricar Rodamientos.", "Revisar Pista y Cejas de Ruedas", "Revisión de Cuñero de Eje (Motriz)."]}, {"name": "Reductor", "items": ["Revisar Soldadura de Base.", "Apriete de Tornillo Base.", "Revisión de Amortiguador.", "Revisión de Nivel de Aceite.", "Cambio de Aceite.", "Revision por fugas en Reten de Salida.", "Revisión por fugas de Reten de Entrada.", "Inspección por Ruidos Internos.", "Apriete en Tornillos de Tapa."]}, {"name": "Acoplamiento del reductor", "items": ["Revisión de Cuñero Flecha Hueca", "Revisión de Cuña.", "Revisión de Seguro Truack", "Apriete deTornillo Candado"]}, {"name": "Estructura del carro", "items": ["Revisar uniones (soldaduras)."]}]}, {"id": "block_3", "title": "Movimiento: Carro B", "subsections": [{"name": "Motores", "items": ["Apriete de conexiones.", "Revisar Corrientes", "Revisar Rodamientos (Ruidos)", "Retenes del Motor", "Reapriete de Tornillos Base."]}, {"name": "Frenos", "items": ["Apriete de Conexiones.", "Ajuste de GAP. (Entre Hierro)", "Revisar Disco de Fricción.", "Revisar Platos del Freno", "Limpiar con Aire Comprimido."]}, {"name": "Cabezales", "items": ["Apriete de Tornillos de Capsulas.", "Revisión de gomas amortiguador.", "Revision de Daños por Grietas", "Lubricar Rodamientos.", "Revisar Pista y Cejas de Ruedas", "Revisión de Cuñero de Eje (Motriz)."]}]}, {"id": "block_4", "title": "Movimiento: Gancho PPL", "subsections": [{"name": "Aparejo Inferior.", "items": ["Rodamientos de poleas.", "Rodamiento Axial.", "Lubricación.", "Poleas.", "Estructura (Armazón).", "Seguro (Hook Latch)", "Marca de Capacidad", "Gancho", "Graganta", "Sección Pincipal de Carga"]}, {"name": "Aparejo Superior.", "items": ["Rodamientos de poleas.", "Lubricación.", "Poleas.", "Estructura (Armazón)."]}, {"name": "Motor", "items": ["Apriete de conexiones.", "Revisar Corrientes", "Lubricar Rodamientos.", "Revisar Rodamientos (Ruidos)", "Retenes del Motor", "Reapriete de Tornillos Base.", "Acoplamiento con encoder."]}, {"name": "Freno", "items": ["Apriete de Conexiones de bobina", "Reviar nivel de aceite hidraulico", "Cambio de Aceite.", "Cambio de balatas."]}, {"name": "Tambor", "items": ["Rodamiento pedestal", "Cople.", "Soldadura de uniones.", "Grapas para cable.", "Ranurado.", "Cable de Acero."]}, {"name": "Reductor", "items": ["Revisar Soldadura de Base.", "Apriete de Tornillo Base.", "Estado de Engranes.", "Revisión de Nivel de Aceite.", "Cambio de Aceite.", "Revision por fugas en Reten de Salida.", "Revisión por fugas de Reten de Entrada.", "Inspección por Ruidos Internos.", "Apriete en Tornillos de Tapa.", "Lineas de Control (Apretar)", "Ventiladores (Revisar Ruidos)"]}, {"name": "Gancho", "items": ["Fusibles Fuerza Inversor.", "Circuito de Protección de Control.", "Contactores y Relevadores.", "Bornes de conexión (Tablilla).", "Inversor.", "Secuencia.", "Programación.", "Lineas de Fuerza (Apretar)", "Lineas de Control (Apretar)", "Ventiladores (Revisar Ruidos)"]}, {"name": "Interruptores de Limite", "items": ["Interruptor Engranado Gancho.", "Interruptor Limite Peso Gancho."]}]}, {"id": "block_5", "title": "Movimiento: Gancho Aux.", "subsections": [{"name": "Aparejo Inferior.", "items": ["Rodamientos de poleas.", "Rodamiento Axial.", "Lubricación.", "Poleas.", "Estructura (Armazón).", "Seguro (Hook Latch)", "Marca de Capacidad", "Gancho", "Graganta", "Sección Pincipal de Carga"]}, {"name": "Aparejo Superior.", "items": ["Rodamientos de poleas.", "Lubricación.", "Poleas.", "Estructura (Armazón)."]}, {"name": "Motor", "items": ["Apriete de conexiones.", "Revisar Corrientes", "Lubricar Rodamientos.", "Revisar Rodamientos (Ruidos)", "Retenes del Motor", "Reapriete de Tornillos Base.", "Acoplamiento con encoder."]}, {"name": "Freno", "items": ["Apriete de Conexiones de bobina", "Reviar nivel de aceite hidraulico", "Cambio de Aceite.", "Cambio de balatas."]}, {"name": "Tambor", "items": ["Rodamiento pedestal", "Cople.", "Soldadura de uniones.", "Grapas para cable.", "Ranurado.", "Cable de Acero."]}, {"name": "Reductor", "items": ["Revisar Soldadura de Base.", "Apriete de Tornillo Base.", "Estado de Engranes.", "Revisión de Nivel de Aceite.", "Cambio de Aceite.", "Revision por fugas en Reten de Salida.", "Revisión por fugas de Reten de Entrada.", "Inspección por Ruidos Internos.", "Apriete en Tornillos de Tapa.", "Lineas de Control (Apretar)", "Ventiladores (Revisar Ruidos)"]}, {"name": "Gancho", "items": ["Fusibles Fuerza Inversor.", "Circuito de Protección de Control.", "Contactores y Relevadores.", "Bornes de conexión (Tablilla).", "Inversor.", "Secuencia.", "Programación.", "Lineas de Fuerza (Apretar)", "Lineas de Control (Apretar)", "Ventiladores (Revisar Ruidos)"]}, {"name": "Interruptores de Limite", "items": ["Interruptor limite de puente.", "Interruptor Engranado Gancho.", "Interruptor Limite Peso Gancho.", "Anticolisión Puente."]}, {"name": "Radio Control", "items": ["Tablero de interconexion (conexiones)", "Display magnetos (conexiones)", "Master gancho.", "Joistick (Carros y puente)", "Pulsadores arranque y paro.", "Selector A y B.", "Selector Alumbrado."]}]}, {"id": "block_6", "title": "Eléctrico Control y Fuerza", "subsections": [{"name": "Puente", "items": ["Fusibles Protección Principal.", "Fusibles Fuerza Inversor.", "Circuito de Protección de Control.", "Colectores Principales.", "Contactores y Relevadores.", "Bornes de conexión (Tablilla).", "Interruptor Principal."]}, {"name": "Inversor.", "items": ["Secuencia.", "Programación.", "Lineas de Fuerza (Apretar)", "Lineas de Control (Apretar)", "Ventiladores (Revisar Ruidos)"]}, {"name": "Carro", "items": ["Fusibles Fuerza Inversor.", "Circuito de Protección de Control.", "Contactores y Relevadores.", "Bornes de conexión (Tablilla).", "Inversor.", "Secuencia.", "Programación.", "Lineas de Fuerza (Apretar)"]}]}];
+    const MONTHS = ["Ene", "Feb", "Mzo", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const STATE_CYCLE = ["", "OK", "PREV", "CORR", "NA"];
+    const STATE_LABELS = { "": "", "OK": "✓", "PREV": "⚠", "CORR": "✕", "NA": "N/A" };
+    const STORAGE_KEY = "sant_cranes_frc001_v1";
+
+    let appState = {
+      meta: {
+        estatus: "EN PROCESO",
+        proyecto: "",
+        cliente: "",
+        pedido: "",
+        serie: "",
+        maquina: "",
+        area: "",
+        capacidad: "",
+        tipo: "",
+        dispositivo: "",
+        periodo: "2026 - 2027",
+        tecnico: "",
+        fechaEntrega: "",
+        fechaMtto: new Date().toISOString().slice(0, 10),
+        contactoCliente: "",
+        notasGenerales: ""
+      },
+      items: {},
+      spareParts: [
+        { item: "01", component: "", action: "", priority: "Alta (Seguridad)" }
+      ]
+    };
+
+    // Flatten items with deterministic IDs
+    const ALL_ITEMS = [];
+    CHECKLIST_BLOCKS.forEach((blk, bIdx) => {
+      blk.subsections.forEach((sub, sIdx) => {
+        sub.items.forEach((label, iIdx) => {
+          const id = `b${bIdx}_s${sIdx}_i${iIdx}`;
+          ALL_ITEMS.push({
+            id,
+            blockId: blk.id,
+            blockTitle: blk.title,
+            subName: sub.name,
+            label
+          });
+        });
+      });
+    });
+
+    function getItemData(id) {
+      if (!appState.items[id]) {
+        appState.items[id] = {
+          freq: "Mensual",
+          months: {},
+          action: "",
+          orig: "",
+          max: "",
+          min: ""
+        };
+      }
+      return appState.items[id];
+    }
+
+    function saveLocal() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      const el = document.getElementById("saveStatus");
+      el.textContent = "Guardado local: " + new Date().toLocaleTimeString();
+      updateKPIs();
+    }
+
+    function loadLocal() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          appState = { ...appState, ...parsed };
+        } catch (e) {}
+      }
+    }
+
+    function syncMetaInputs() {
+      Object.keys(appState.meta).forEach(k => {
+        const el = document.getElementById("meta_" + k);
+        if (el) el.value = appState.meta[k] || "";
+      });
+    }
+
+    document.querySelectorAll(".meta-input").forEach(el => {
+      el.addEventListener("input", () => {
+        const key = el.id.replace("meta_", "");
+        appState.meta[key] = el.value;
+        saveLocal();
+      });
+    });
+
+    function renderBlockTabs() {
+      const tabsEl = document.getElementById("blockTabs");
+      tabsEl.innerHTML = CHECKLIST_BLOCKS.map(b => {
+        const count = b.subsections.reduce((acc, s) => acc + s.items.length, 0);
+        return `<a href="#${b.id}" class="px-3 py-1 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-bold transition">${b.title} <span class="text-amber-400">(${count})</span></a>`;
+      }).join("");
+    }
+
+    function renderChecklist() {
+      const container = document.getElementById("checklistContainer");
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      const filterState = document.getElementById("filterState").value;
+
+      let html = "";
+
+      CHECKLIST_BLOCKS.forEach((blk, bIdx) => {
+        let blockRowsHtml = "";
+        let blockVisibleCount = 0;
+
+        blk.subsections.forEach((sub, sIdx) => {
+          let subRows = "";
+          sub.items.forEach((label, iIdx) => {
+            const id = `b${bIdx}_s${sIdx}_i${iIdx}`;
+            const data = getItemData(id);
+            const vals = Object.values(data.months);
+            const hasEval = vals.some(v => v && v !== "");
+            const hasIssue = vals.some(v => v === "PREV" || v === "CORR");
+
+            if (query && !label.toLowerCase().includes(query) && !sub.name.toLowerCase().includes(query) && !blk.title.toLowerCase().includes(query)) {
+              return;
+            }
+            if (filterState === "ISSUES" && !hasIssue) return;
+            if (filterState === "EVALUATED" && !hasEval) return;
+
+            blockVisibleCount++;
+
+            const monthCells = MONTHS.map(m => {
+              const st = data.months[m] || "";
+              return `<td class="p-1 text-center border-l border-slate-200">
+                <button type="button" class="month-btn" data-id="${id}" data-month="${m}" data-state="${st}" title="${m}: Clic para cambiar estado">${STATE_LABELS[st]}</button>
+              </td>`;
+            }).join("");
+
+            subRows += `
+              <tr class="hover:bg-slate-50 border-b border-slate-200 text-xs">
+                <td class="p-2 font-medium text-slate-800 min-w-[210px]">${label}</td>
+                <td class="p-1.5 border-l border-slate-200 w-24">
+                  <select data-id="${id}" data-field="freq" class="item-field w-full bg-slate-50 border border-slate-200 rounded px-1.5 py-1 text-[11px] font-semibold">
+                    ${["Semanal", "Mensual", "Trimestral", "Semestral", "Anual"].map(f => `<option value="${f}" ${data.freq === f ? "selected" : ""}>${f}</option>`).join("")}
+                  </select>
+                </td>
+                ${monthCells}
+                <td class="p-1.5 border-l border-slate-200 min-w-[170px]">
+                  <input type="text" data-id="${id}" data-field="action" value="${(data.action || "").replace(/"/g, '&quot;')}" placeholder="Observación / acción..." class="item-field w-full px-2 py-1 rounded border border-slate-200 text-[11px] focus:border-navy-900 focus:outline-none" />
+                </td>
+                <td class="p-1 border-l border-slate-200 w-16">
+                  <input type="text" data-id="${id}" data-field="orig" value="${(data.orig || "").replace(/"/g, '&quot;')}" placeholder="Orig" class="item-field w-full px-1.5 py-1 rounded border border-slate-200 text-[11px] text-center" />
+                </td>
+                <td class="p-1 border-l border-slate-200 w-16">
+                  <input type="text" data-id="${id}" data-field="max" value="${(data.max || "").replace(/"/g, '&quot;')}" placeholder="Max" class="item-field w-full px-1.5 py-1 rounded border border-slate-200 text-[11px] text-center" />
+                </td>
+                <td class="p-1 border-l border-slate-200 w-16">
+                  <input type="text" data-id="${id}" data-field="min" value="${(data.min || "").replace(/"/g, '&quot;')}" placeholder="Min" class="item-field w-full px-1.5 py-1 rounded border border-slate-200 text-[11px] text-center" />
+                </td>
+              </tr>
+            `;
+          });
+
+          if (subRows) {
+            blockRowsHtml += `
+              <tr class="bg-slate-200/80 border-y border-slate-300">
+                <td colspan="18" class="px-3 py-2">
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="font-display text-sm font-extrabold uppercase tracking-wide text-navy-900">▸ ${sub.name}</span>
+                    <button type="button" onclick="markSubOk(${bIdx}, ${sIdx})" class="no-print px-2.5 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-bold transition">
+                      ✓ Marcar Subsistema OK (Mes Actual)
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              ${subRows}
+            `;
+          }
+        });
+
+        if (blockVisibleCount > 0) {
+          html += `
+            <section id="${blk.id}" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden print-card scroll-mt-24">
+              <div class="bg-navy-900 text-white px-5 py-3.5 flex flex-wrap items-center justify-between gap-2 border-b-4 border-amber-500">
+                <h3 class="font-display text-xl font-extrabold uppercase tracking-wide text-amber-400">${blk.title}</h3>
+                <span class="text-xs font-bold text-slate-300">${blockVisibleCount} puntos de inspección</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-left">
+                  <thead>
+                    <tr class="bg-slate-800 text-white text-[11px] uppercase">
+                      <th class="p-2.5">Componente / Actividad</th>
+                      <th class="p-2 border-l border-slate-700">Frecuencia</th>
+                      ${MONTHS.map(m => `<th class="p-1.5 text-center border-l border-slate-700">${m}</th>`).join("")}
+                      <th class="p-2 border-l border-slate-700">Acción Preventiva y/o Correctiva</th>
+                      <th class="p-1.5 text-center border-l border-slate-700">Original</th>
+                      <th class="p-1.5 text-center border-l border-slate-700">Max</th>
+                      <th class="p-1.5 text-center border-l border-slate-700">Min</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${blockRowsHtml}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          `;
+        }
+      });
+
+      container.innerHTML = html || `<div class="bg-white rounded-2xl p-8 text-center text-slate-500 border border-slate-200">No se encontraron puntos con ese filtro.</div>`;
+      bindChecklistEvents();
+    }
+
+    function bindChecklistEvents() {
+      document.querySelectorAll(".month-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.id;
+          const m = btn.dataset.month;
+          const data = getItemData(id);
+          const cur = data.months[m] || "";
+          const next = STATE_CYCLE[(STATE_CYCLE.indexOf(cur) + 1) % STATE_CYCLE.length];
+          data.months[m] = next;
+          btn.dataset.state = next;
+          btn.textContent = STATE_LABELS[next];
+          saveLocal();
+        });
+      });
+
+      document.querySelectorAll(".item-field").forEach(el => {
+        el.addEventListener("input", () => {
+          const id = el.dataset.id;
+          const field = el.dataset.field;
+          const data = getItemData(id);
+          data[field] = el.value;
+          saveLocal();
+        });
+      });
+    }
+
+    window.markSubOk = function(bIdx, sIdx) {
+      const monthIdx = new Date().getMonth();
+      const currentMonth = MONTHS[monthIdx] || "Nov";
+      const sub = CHECKLIST_BLOCKS[bIdx].subsections[sIdx];
+      sub.items.forEach((_, iIdx) => {
+        const id = `b${bIdx}_s${sIdx}_i${iIdx}`;
+        const data = getItemData(id);
+        if (!data.months[currentMonth]) {
+          data.months[currentMonth] = "OK";
+        }
+      });
+      saveLocal();
+      renderChecklist();
+    };
+
+    function updateKPIs() {
+      let ok = 0, prev = 0, corr = 0, evaluatedItems = 0;
+      ALL_ITEMS.forEach(it => {
+        const d = getItemData(it.id);
+        const vals = Object.values(d.months).filter(v => v && v !== "");
+        if (vals.length > 0) evaluatedItems++;
+        vals.forEach(v => {
+          if (v === "OK") ok++;
+          else if (v === "PREV") prev++;
+          else if (v === "CORR") corr++;
+        });
+      });
+      document.getElementById("kpiTotal").textContent = ALL_ITEMS.length;
+      document.getElementById("kpiOk").textContent = ok;
+      document.getElementById("kpiPrev").textContent = prev;
+      document.getElementById("kpiCorr").textContent = corr;
+      const pct = Math.round((evaluatedItems / ALL_ITEMS.length) * 100);
+      document.getElementById("kpiPct").textContent = pct + "%";
+    }
+
+    // SPARE PARTS TABLE
+    function renderSpareParts() {
+      const tbody = document.getElementById("partsTableBody");
+      tbody.innerHTML = appState.spareParts.map((p, idx) => `
+        <tr>
+          <td class="p-2"><input type="text" value="${p.item}" onchange="updatePart(${idx}, 'item', this.value)" class="w-12 px-2 py-1 border border-slate-300 rounded font-bold text-center" /></td>
+          <td class="p-2"><input type="text" value="${(p.component || "").replace(/"/g, '&quot;')}" onchange="updatePart(${idx}, 'component', this.value)" placeholder="Ej. Contactor LC1D8011 / Separadores de polea" class="w-full px-2.5 py-1 border border-slate-300 rounded" /></td>
+          <td class="p-2"><input type="text" value="${(p.action || "").replace(/"/g, '&quot;')}" onchange="updatePart(${idx}, 'action', this.value)" placeholder="Ej. Sustitución por desgaste / saturación" class="w-full px-2.5 py-1 border border-slate-300 rounded" /></td>
+          <td class="p-2">
+            <select onchange="updatePart(${idx}, 'priority', this.value)" class="w-full px-2 py-1 border border-slate-300 rounded font-semibold">
+              ${["Alta (Seguridad)", "Alta (Mecánica)", "Alta (Eléctrica)", "Media", "Baja"].map(pr => `<option value="${pr}" ${p.priority === pr ? "selected" : ""}>${pr}</option>`).join("")}
+            </select>
+          </td>
+          <td class="no-print p-2 text-center">
+            <button type="button" onclick="removePart(${idx})" class="text-red-600 font-bold hover:underline">✕</button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    window.updatePart = function(idx, field, val) {
+      appState.spareParts[idx][field] = val;
+      saveLocal();
+    };
+    window.removePart = function(idx) {
+      appState.spareParts.splice(idx, 1);
+      saveLocal();
+      renderSpareParts();
+    };
+    document.getElementById("btnAddPart").addEventListener("click", () => {
+      const nextNum = String(appState.spareParts.length + 1).padStart(2, "0");
+      appState.spareParts.push({ item: nextNum, component: "", action: "", priority: "Alta (Mecánica)" });
+      saveLocal();
+      renderSpareParts();
+    });
+
+    // SIGNATURE PADS
+    function initCanvas(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      ctx.strokeStyle = "#0B1B32";
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = "round";
+      let drawing = false;
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: (clientX - rect.left) * (canvas.width / rect.width),
+          y: (clientY - rect.top) * (canvas.height / rect.height)
+        };
+      }
+
+      canvas.addEventListener("mousedown", e => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+      canvas.addEventListener("mousemove", e => { if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+      window.addEventListener("mouseup", () => { drawing = false; });
+
+      canvas.addEventListener("touchstart", e => { e.preventDefault(); drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
+      canvas.addEventListener("touchmove", e => { e.preventDefault(); if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }, { passive: false });
+      canvas.addEventListener("touchend", () => { drawing = false; });
+    }
+
+    window.clearSignature = function(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+
+    function isCanvasBlank(canvas) {
+      const blank = document.createElement("canvas");
+      blank.width = canvas.width;
+      blank.height = canvas.height;
+      return canvas.toDataURL() === blank.toDataURL();
+    }
+
+    // EXAMPLE LOADER (FROM SHEET 'GRUA SPH' IN EXCEL)
+    document.getElementById("btnLoadExample").addEventListener("click", () => {
+      appState.meta = {
+        estatus: "CONCLUIDO",
+        proyecto: "Mantenimiento Preventivo Grúa SPH 20/7.5 Ton",
+        cliente: "METALSA",
+        pedido: "SEM-A00049",
+        serie: "MK2000",
+        maquina: "GR-SPH-03",
+        area: "Estampado Módulo 3 - Apodaca, N.L.",
+        capacidad: "20 / 7.5 TON",
+        tipo: "Bipuente - Marca SPH",
+        dispositivo: "Gancho Principal y Auxiliar",
+        periodo: "2026 - 2027",
+        tecnico: "Hugo Eduardo González / Armando Contreras",
+        fechaEntrega: "2026-11-20",
+        fechaMtto: "2026-11-22",
+        contactoCliente: "Ing. Sergio Rodríguez / Ing. Sergio Polina",
+        notasGenerales: "Se recomienda cambio de tablero de control de carro y puente por saturación de cableado. No se reapretó tablero de variador de gancho auxiliar por orden del Ing. Sergio Polina."
+      };
+
+      // Sample inspection markings
+      ALL_ITEMS.forEach((it, idx) => {
+        const d = getItemData(it.id);
+        d.months = {};
+        d.action = "";
+        if (idx % 3 === 0) d.months["Nov"] = "OK";
+      });
+      // Specific findings from GRUA SPH sheet
+      const p0 = getItemData("b0_s0_i3"); // Retenes del motor puente
+      p0.months["Nov"] = "PREV";
+      p0.action = "Faltan caperuzas a motores del puente.";
+
+      const gPpl = getItemData("b3_s0_i3"); // Poleas Gancho PPL
+      gPpl.months["Nov"] = "PREV";
+      gPpl.action = "Presenta desgaste ligero en poleas.";
+
+      const gAux = getItemData("b4_s1_i2"); // Poleas aparejo superior Aux
+      gAux.months["Nov"] = "CORR";
+      gAux.action = "Problema en aparejo superior en separadores de polea final.";
+
+      appState.spareParts = [
+        { item: "01", component: "Contactor LC1D8011 (Movimiento Gancho Auxiliar)", action: "Sustitución inmediata", priority: "Alta (Eléctrica)" },
+        { item: "02", component: "Separadores de polea final (Aparejo Superior Gancho Aux.)", action: "Reemplazo por desgaste", priority: "Alta (Mecánica)" },
+        { item: "03", component: "Separadores de freno (Movimiento del Carro)", action: "Suministro e instalación", priority: "Media" }
+      ];
+
+      syncMetaInputs();
+      saveLocal();
+      renderChecklist();
+      renderSpareParts();
+    });
+
+    // SAVE TO GOOGLE APPS SCRIPT
+    document.getElementById("btnSaveAppsScript").addEventListener("click", async () => {
+      const banner = document.getElementById("syncBanner");
+      const techCanvas = document.getElementById("sigTech");
+      const clientCanvas = document.getElementById("sigClient");
+
+      const itemsPayload = ALL_ITEMS.map(it => {
+        const d = getItemData(it.id);
+        return {
+          block: it.blockTitle,
+          sub: it.subName,
+          label: it.label,
+          freq: d.freq,
+          months: d.months,
+          action: d.action,
+          orig: d.orig,
+          max: d.max,
+          min: d.min
+        };
+      });
+
+      const payload = {
+        action: "checklist",
+        meta: appState.meta,
+        stats: {
+          total: ALL_ITEMS.length,
+          ok: Number(document.getElementById("kpiOk").textContent),
+          prev: Number(document.getElementById("kpiPrev").textContent),
+          corr: Number(document.getElementById("kpiCorr").textContent)
+        },
+        items: itemsPayload,
+        spareParts: appState.spareParts,
+        firmaTecnico: isCanvasBlank(techCanvas) ? "" : techCanvas.toDataURL("image/png"),
+        firmaCliente: isCanvasBlank(clientCanvas) ? "" : clientCanvas.toDataURL("image/png")
+      };
+
+      if (!APPS_SCRIPT_URL) {
+        banner.classList.remove("hidden", "bg-emerald-50", "text-emerald-900", "border-emerald-300");
+        banner.classList.add("bg-amber-50", "text-amber-900", "border-amber-300");
+        banner.innerHTML = "⚠️ <strong>Falta configurar APPS_SCRIPT_URL:</strong> Abre <code>checklist.html</code>, pega la URL <code>/exec</code> de tu implementación de <code>Code.gs</code> en la constante <code>APPS_SCRIPT_URL</code> y vuelve a subir a GitHub. Mientras tanto, tus datos siguen guardados localmente y puedes exportar CSV/JSON o imprimir PDF.";
+        banner.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+
+      const btn = document.getElementById("btnSaveAppsScript");
+      btn.disabled = true;
+      btn.textContent = "Enviando reporte...";
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        banner.classList.remove("hidden", "bg-amber-50", "text-amber-900", "border-amber-300");
+        banner.classList.add("bg-emerald-50", "text-emerald-900", "border-emerald-300");
+        banner.innerHTML = "✅ <strong>¡Reporte FRC001 enviado a Google Sheets y Drive!</strong> Se registró el resumen, el detalle de inspección, las firmas digitales y se envió notificación por correo.";
+        banner.scrollIntoView({ behavior: "smooth" });
+      } catch (err) {
+        banner.classList.remove("hidden");
+        banner.classList.add("bg-red-50", "text-red-900", "border-red-300");
+        banner.innerHTML = "❌ Error de conexión al enviar a Google Apps Script. Usa <strong>Respaldo JSON</strong> o <strong>Exportar Excel (CSV)</strong> para no perder los datos.";
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "☁ Guardar en Google Sheets / Drive";
+      }
+    });
+
+    // EXPORT CSV (EXCEL COMPATIBLE WITH UTF-8 BOM)
+    document.getElementById("btnExportCSV").addEventListener("click", () => {
+      const rows = [
+        ["SANT CRANES - CHECK LIST MANTENIMIENTO PREVENTIVO (FRC001)"],
+        ["Cliente", appState.meta.cliente, "Proyecto", appState.meta.proyecto, "Pedido", appState.meta.pedido],
+        ["Grúa Serie", appState.meta.serie, "Capacidad", appState.meta.capacidad, "Tipo", appState.meta.tipo],
+        ["Área", appState.meta.area, "Técnico", appState.meta.tecnico, "Fecha Mtto", appState.meta.fechaMtto],
+        [],
+        ["Movimiento", "Subsistema", "Punto de Inspección", "Frecuencia", ...MONTHS, "Acción Preventiva / Correctiva", "Original", "Max", "Min"]
+      ];
+      ALL_ITEMS.forEach(it => {
+        const d = getItemData(it.id);
+        rows.push([
+          it.blockTitle,
+          it.subName,
+          it.label,
+          d.freq,
+          ...MONTHS.map(m => d.months[m] || ""),
+          d.action || "",
+          d.orig || "",
+          d.max || "",
+          d.min || ""
+        ]);
+      });
+      const csvContent = "\uFEFF" + rows.map(r => r.map(c => `"${String(c || "").replace(/"/g, '""')}"`).join(",")).join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `SANT_CRANES_Checklist_${appState.meta.pedido || "FRC001"}.csv`;
+      a.click();
+    });
+
+    // EXPORT JSON
+    document.getElementById("btnExportJSON").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(appState, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `SANT_CRANES_Respaldo_${appState.meta.pedido || "FRC001"}.json`;
+      a.click();
+    });
+
+    // RESET
+    document.getElementById("btnResetAll").addEventListener("click", () => {
+      if (!confirm("¿Seguro que deseas limpiar todos los campos y marcas del checklist?")) return;
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    });
+
+    document.getElementById("searchInput").addEventListener("input", renderChecklist);
+    document.getElementById("filterState").addEventListener("change", renderChecklist);
+
+    // INIT
+    loadLocal();
+    syncMetaInputs();
+    renderBlockTabs();
+    renderChecklist();
+    renderSpareParts();
+    updateKPIs();
+    initCanvas("sigTech");
+    initCanvas("sigClient");
+  </script>
+</body>
+</html>
